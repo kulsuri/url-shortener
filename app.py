@@ -1,6 +1,6 @@
 # modules
 from flask import Flask
-from flask_restful import Resource, Api
+#from flask_restful import Resource, Api
 
 # create an instance of the web app
 app = Flask(__name__)
