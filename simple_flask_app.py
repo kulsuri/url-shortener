@@ -63,5 +63,6 @@ def not_found(error):
 def not_found400(error):
     return make_response(jsonify({'error': '400 - failed to decode json object'}), 400)
 
+# run the app from terminal
 if __name__ == '__main__':
     app.run(debug=True)
