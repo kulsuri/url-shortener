@@ -1,5 +1,6 @@
 # modules
 from flask import Flask, jsonify, abort, make_response, request
+import json
 
 # create an instance of the web app
 app = Flask(__name__)
@@ -39,19 +40,34 @@ def get_task(task_id):
     return jsonify({'task': task[0]})
 
 # define POST route /shorten_url
-@app.route('/shorten_urley', methods=['POST'])
+@app.route('/shorten_url', methods=['POST'])
 def create_task():
-    if not request.json or not 'title' in request.json:
+
+    req_data = request.get_json()
+    
+    if not req_data or not 'title' in req_data:
         abort(400)
+
     new_task = {
         'id': tasks[-1]['id'] + 1,
-        'title': request.json['title'],
-        'description': request.json.get['description', ""],
+        'title': req_data['title'],
+        'description': req_data.get('description', ""),
         'done': False
     }
 
     tasks.append(new_task)
     return jsonify({'task': new_task}), 201
+
+# define POST route /json-example
+@app.route('/json-example', methods=['POST'])
+def json_example():
+
+    req_data = request.get_json()
+    language = req_data['language']
+
+    return '''
+        the language value is: {}
+    '''.format(language)
 
 # define 404 error handler route
 @app.errorhandler(404)
