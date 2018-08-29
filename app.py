@@ -44,7 +44,7 @@ def check_url_in_db(normalized_url):
 # get the shortened url from from the url_db database
 def get_shortened_url_in_db(normalized_url):
     url = [url for url in url_db if url['url'] == normalized_url]
-    return jsonify({'shortened_url': request.url_root + url[0]['shortened_url']}), 201
+    return jsonify({'shortened_url': request.url_root + url[0]['shortened_url']})
 
 # create a new shortened url
 def create_url(normalized_url):
