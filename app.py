@@ -12,28 +12,27 @@ app = Flask(__name__)
 url_db = [
     {
         'id': 1,
-        'url': 'http://www.google.com',
+        'url': 'http://google.com',
         'shortened_url': '867nv'
     },
     {
         'id': 2,
-        'url': 'http://www.babylonhealth.com',
+        'url': 'http://babylonhealth.com',
         'shortened_url': '25t52'
     }
 ]
 
-# normalize urls to specific format to prevent replication in url_db database
+# normalize/format urls to a specific format to prevent replication in url_db database
 def url_normalizer(unformatted_url):
     p = urlparse(unformatted_url, 'http')
-    
     if p.netloc:
         netloc = p.netloc
         path = p.path
     else:
         netloc = p.path
         path = ''
-    if not netloc.startswith('www.'):
-        netloc = 'www.' + netloc
+    if netloc.startswith('www.'):
+         netloc = netloc[4:] # remove 'www.' from the start of urls for consistency & avoid replication 
     p = p._replace(netloc=netloc, path=path)
     return p.geturl()
 
@@ -42,10 +41,10 @@ def check_url_in_db(normalized_url):
     if not any(record['url'] == normalized_url for record in url_db):
         return True
 
-# get the url record from from the url_db
-def get_url_in_db(normalized_url):
+# get the shortened url from from the url_db
+def get_shortened_url_in_db(normalized_url):
     url = [url for url in url_db if url['url'] == normalized_url]
-    return jsonify({'url': url[0]})
+    return jsonify({'shortened_url': request.url_root + url[0]['shortened_url']}), 201 #jsonify({'url': url[0]})
 
 # create a new shortened url
 def create_url(normalized_url):
@@ -53,35 +52,44 @@ def create_url(normalized_url):
     new_url = {
             'id': url_db[-1]['id'] + 1,
             'url': normalized_url,
-            'shortened_url': request.url_root + short_url.encode_url(url_db[-1]['id'] + 1)
+            'shortened_url': short_url.encode_url(url_db[-1]['id'] + 1)
         }
 
     # append new shorted url to url_db
     url_db.append(new_url)
 
-    return jsonify({'url': new_url}), 201
+    return get_shortened_url_in_db(new_url['url']) #jsonify({'url': new_url}), 201
 
 # define route /
-@app.route("/")
-def hello(): # function that will be executed when route localhost:5000/ is accessed
-    #return "URL Shortener App built with Python and Flask"
-    return jsonify(url_db)
+@app.route("/", methods=['GET'])
+def display_url_db():
+    return jsonify(url_db) # return the url_db for viewing
 
-# define GET route <shortened_url>
-@app.route('/<shortened_url>', methods=['GET'])
+# define GET route /<shortened_url>
+@app.route('/<string:shortened_url>', methods=['GET'])
 def get_url(shortened_url):
-    url_key = short_url.decode_url(shortened_url) # decode the shortened url
-    url = [url for url in url_db if url['id'] == url_key] # find the url key in the url_db
-    if len(url) == 0: # error handling
+    
+    # decode the shortened url
+    url_key = short_url.decode_url(shortened_url)
+
+    # find the url key in the url_db
+    url = [url for url in url_db if url['id'] == url_key]
+    
+    # error handling
+    if len(url) == 0: 
         abort(404)
+    
+    # reirect to url
     redirect_link = url[0]['url']
-    return redirect(redirect_link, code=302) #jsonify({'url': url[0]})
+    
+    return redirect(redirect_link, code=302)
 
 # define POST route /shorten_url
 @app.route('/shorten_url', methods=['POST'])
 def create_shortened_url():
 
-    req_data = request.get_json() # store json post request object in variable
+    # store json post request object in variable
+    req_data = request.get_json()
 
     # error handling request object - if json post request object is empty or missing url key value pair
     if not req_data or not 'url' in req_data: 
@@ -94,16 +102,12 @@ def create_shortened_url():
     if not validators.url(normalized_url):
         abort(400)
 
-    # check that the url is not in the url_db database
+    # check that the url does not exist in the url_db database
     if check_url_in_db(normalized_url) != True:
-        # get the shortened url from the url_db
-        return get_url_in_db(normalized_url)
+        return get_shortened_url_in_db(normalized_url) # return the shortened url from the url_db database
     else:
-        #  create new shortened url dictionary to be added to url_db
+        # create new shortened url o be added to the url_db database
         return create_url(normalized_url)
-
-    #return jsonify({'url': 'hello'}), 201
-
 
 # define 404 error handler route
 @app.errorhandler(404)
