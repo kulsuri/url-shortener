@@ -1,5 +1,6 @@
 # modules
 from flask import Flask, jsonify, abort, make_response, request, redirect
+from urllib.parse import urlparse
 import short_url
 import json
 import validators
@@ -21,10 +22,25 @@ url_db = [
     }
 ]
 
+# normalize urls to http://www format
+def url_normalizer(unformatted_url):
+    p = urlparse(unformatted_url, 'http')
+    if p.netloc:
+        netloc = p.netloc
+        path = p.path
+    else:
+        netloc = p.path
+        path = ''
+    if not netloc.startswith('www.'):
+        netloc = 'www.' + netloc
+    p = p._replace(netloc=netloc, path=path)
+    return p.geturl()
+
 # define route /
 @app.route("/")
 def hello(): # function that will be executed when route localhost:5000/ is accessed
-    return "URL Shortener App built with Python and Flask"
+    #return "URL Shortener App built with Python and Flask"
+    return jsonify(url_db)
 
 # define GET route <shortened_url>
 @app.route('/<shortened_url>', methods=['GET'])
@@ -41,16 +57,17 @@ def get_url(shortened_url):
 def create_shortened_url():
 
     req_data = request.get_json() # store json post request object in variable
-    
+    normalized_url = url_normalizer(req_data['url']) # normalize/format url
+
     # error handling
     if not req_data or not 'url' in req_data: # if json post request object is empty or missing url key
         abort(400)
-    elif not validators.url(req_data['url']): # if json post request object is invalid url
+    elif not validators.url(normalized_url): # if json post request object is invalid url
         return("Error: you must provide a valid URL! For example: http://www.google.com")
     else:
         new_url = {
             'id': url_db[-1]['id'] + 1,
-            'url': req_data['url'],
+            'url': normalized_url,
             'shortened_url': short_url.encode_url(url_db[-1]['id'] + 1)
         }
 
