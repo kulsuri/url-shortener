@@ -1,5 +1,5 @@
 # url-shortener
-python web app to shorten urls
+Python web app built with Flask to shorten urls via rest api.
 
 # Installation Instructions
 1. Open cmd/terminal
