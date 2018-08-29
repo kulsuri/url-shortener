@@ -78,4 +78,17 @@ localhost:5000
         "shortened_url": "ghpzy",
         "url": "http://helloworld.com"
     }
+]
 ```
+# Scaling
+The solution allows for scaling due to:
+- suitable error handling
+- url validation reducing computational expense
+- url normalization/formatting to prevent replication in the database
+- built with functional programming in mind
+- admittedly the current database method (list of dictionaries) is not suitable for scaling
+
+How I would scale the app:
+- run the application on a proper web server such as Apache or Nginx that supports execution of python
+- these will easily handle many simultaneous connections
+- replace the current database method with a relational database, like sqlite

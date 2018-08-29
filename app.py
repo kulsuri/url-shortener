@@ -41,10 +41,27 @@ def check_url_in_db(normalized_url):
     if not any(record['url'] == normalized_url for record in url_db):
         return True
 
-# get the shortened url from from the url_db database
+# get the shortened url from the url_db database
 def get_shortened_url_in_db(normalized_url):
     url = [url for url in url_db if url['url'] == normalized_url]
-    return jsonify({'shortened_url': request.url_root + url[0]['shortened_url']})
+    return jsonify({'shortened_url': request.url_root + url[0]['shortened_url']}), 201
+
+# get the full url from the url_db database
+def get_full_url_in_db(shortened_url):
+    # decode the shortened url
+    url_key = short_url.decode_url(shortened_url)
+
+    # find the url key in the url_db
+    url = [url for url in url_db if url['id'] == url_key]
+    
+    # error handling
+    if len(url) == 0: 
+        abort(404)
+    
+    # return original url
+    original_url = url[0]['url']
+
+    return original_url
 
 # create a new shortened url
 def create_url(normalized_url):
@@ -58,7 +75,7 @@ def create_url(normalized_url):
     # append new shorted url to url_db
     url_db.append(new_url)
 
-    return get_shortened_url_in_db(new_url['url']), 201
+    return get_shortened_url_in_db(new_url['url'])
 
 # define route /
 @app.route("/", methods=['GET'])
@@ -69,19 +86,10 @@ def display_url_db():
 @app.route('/<string:shortened_url>', methods=['GET'])
 def get_url(shortened_url):
     
-    # decode the shortened url
-    url_key = short_url.decode_url(shortened_url)
+    # get the original url for the shortened url
+    redirect_link = get_full_url_in_db(shortened_url) 
 
-    # find the url key in the url_db
-    url = [url for url in url_db if url['id'] == url_key]
-    
-    # error handling
-    if len(url) == 0: 
-        abort(404)
-    
-    # reirect to url
-    redirect_link = url[0]['url']
-    
+    # redirect to the original url
     return redirect(redirect_link, code=302)
 
 # define POST route /shorten_url
