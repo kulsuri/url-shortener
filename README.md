@@ -50,3 +50,32 @@ GET
 localhost:5000/ghpzy
 ```
 - Response: redirected to the the original URL (www.helloworld.com) / returned the contents of the original URL
+
+# View Database - GET Request
+- Request type:
+```
+GET
+```
+- URL: 
+```
+localhost:5000
+```
+- Response:
+```
+[
+    {
+        "id": 1,
+        "shortened_url": "867nv",
+        "url": "http://google.com"
+    },
+    {
+        "id": 2,
+        "shortened_url": "25t52",
+        "url": "http://babylonhealth.com"
+    },
+    {
+        "id": 3,
+        "shortened_url": "ghpzy",
+        "url": "http://helloworld.com"
+    }
+```
