@@ -12,17 +12,35 @@ cd C:\\...\\...\url-shortener
 pip install -r requirements.txt
 ```
 # Running the App
-1. Run the command: python app.py
+1. Run the command: 
+```
+python app.py
+```
 2. Use an application like Postman to make GET/POST requests
 
 # Shorten URL Example - POST Request
 - Request type: POST
-- URL: localhost:5000/shorten_url
-- Headers: {'Content-Type': 'application/json'}
-- Body: {'url': 'www.helloworld.com'} 
-- Response: {"shortened_url": "http://localhost:5000/ghpzy"}
+- URL: 
+```
+localhost:5000/shorten_url
+```
+- Headers: 
+```
+{'Content-Type': 'application/json'}
+```
+- Body: 
+```
+{'url': 'www.helloworld.com'}
+``` 
+- Response: 
+```
+{"shortened_url": "http://localhost:5000/ghpzy"}
+```
 
 # Redirect Example - GET Request
 - Request type: GET
-- URL: localhost:5000/ghpzy
+- URL: 
+```
+localhost:5000/ghpzy
+```
 - Response: redirected to the the original URL (www.helloworld.com) / returned the contents of the original URL
