@@ -19,7 +19,10 @@ python app.py
 2. Use an application like Postman to make GET/POST requests
 
 # Shorten URL Example - POST Request
-- Request type: POST
+- Request type:
+```
+POST
+```
 - URL: 
 ```
 localhost:5000/shorten_url
@@ -38,7 +41,10 @@ localhost:5000/shorten_url
 ```
 
 # Redirect Example - GET Request
-- Request type: GET
+- Request type:
+```
+GET
+```
 - URL: 
 ```
 localhost:5000/ghpzy
