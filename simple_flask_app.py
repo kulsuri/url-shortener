@@ -32,7 +32,7 @@ def get_tasks(): # function that will be executed when route localhost:5000/task
     return jsonify({'tasks': tasks})
 
 # define GET route /shorten_url/<task_id>
-@app.route('/shorten_url/<int:task_id>', methods=['GET'])
+@app.route('/<int:task_id>', methods=['GET'])
 def get_task(task_id):
     task = [task for task in tasks if task['id'] == task_id]
     if len(task) == 0:
