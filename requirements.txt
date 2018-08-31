@@ -1,7 +1,3 @@
 flask
 short_url
-json
 validators
-urllib.parse
-os
-sqlite3
