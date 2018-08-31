@@ -63,21 +63,36 @@ localhost:5000
 - Response:
 ```
 [
-    {
-        "id": 1,
-        "shortened_url": "867nv",
-        "url": "http://google.com"
-    },
-    {
-        "id": 2,
-        "shortened_url": "25t52",
-        "url": "http://babylonhealth.com"
-    },
-    {
-        "id": 3,
-        "shortened_url": "ghpzy",
-        "url": "http://helloworld.com"
-    }
+  [
+    1, 
+    "http://w3.com", 
+    "867nv"
+  ], 
+  [
+    2, 
+    "http://babylonhealth.com", 
+    "25t52"
+  ], 
+  [
+    3, 
+    "http://google.com", 
+    "ghpzy"
+  ], 
+  [
+    4, 
+    "http://theverge.com", 
+    "6vyv6"
+  ], 
+  [
+    5, 
+    "http://hotukdeals.com", 
+    "pbq8b"
+  ], 
+  [
+    6, 
+    "http://youtube.com", 
+    "4xct4"
+  ]
 ]
 ```
 # Scaling
@@ -86,9 +101,8 @@ The solution allows for scaling due to:
 - url validation reducing computational expense
 - url normalization/formatting to prevent replication in the database
 - built with functional programming in mind
-- admittedly the current database method (list of dictionaries) is not suitable for scaling
+- shortened urls are stored in a sqlite database, separate to the code, for fast retrieval 
 
 How I would scale the app:
 - run the application on a proper web server such as Apache or Nginx that supports execution of python
 - these will easily handle many simultaneous connections
-- replace the current database method with a relational database, like sqlite
