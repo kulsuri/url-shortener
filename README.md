@@ -5,7 +5,7 @@ Python web app built with Flask to shorten urls via rest api
 1. Open command prompt (windows) or terminal (mac/linux)
 2. Navigate to the project path: 
 ```
-cd C:\\...\\...\url-shortener
+cd C:\path\to\url-shortener
 ```
 3. Run the command:
 ```
@@ -33,11 +33,11 @@ localhost:5000/shorten_url
 ```
 - Body: 
 ```
-{'url': 'www.helloworld.com'}
+{'url': 'www.babylonhealth.com'}
 ``` 
 - Response: 
 ```
-{"shortened_url": "http://localhost:5000/ghpzy"}
+{"shortened_url": "http://localhost:5000/25t52"}
 ```
 
 # Redirect Example - GET Request
@@ -47,11 +47,11 @@ GET
 ```
 - URL: 
 ```
-localhost:5000/ghpzy
+localhost:5000/25t52
 ```
-- Response: redirected to the the original URL (www.helloworld.com) / returned the contents of the original URL
+- Response: redirected to the the original URL (http://babylonhealth.com) / returned the contents of the original URL
 
-# View Database - GET Request
+# View SQLite Database - GET Request
 - Request type:
 ```
 GET
