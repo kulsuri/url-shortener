@@ -1,6 +1,9 @@
 # url-shortener
 Python web app built with Flask to shorten urls via rest api
 
+# Pre-requisites
+- Python 3.6
+
 # Installation Instructions
 1. Open command prompt (windows) or terminal (mac/linux)
 2. Navigate to the project path: 
@@ -17,7 +20,7 @@ pip install -r requirements.txt
 python app.py
 ```
 2. Use an application like Postman to make GET/POST requests
-Note: if you want a new empty database, please delete the urls.db
+- Note: if you want a new empty database, please delete the urls.db
 
 # Shorten URL Example - POST Request
 - Request type:
