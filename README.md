@@ -17,6 +17,7 @@ pip install -r requirements.txt
 python app.py
 ```
 2. Use an application like Postman to make GET/POST requests
+Note: if you want a new empty database, please delete the urls.db
 
 # Shorten URL Example - POST Request
 - Request type:
